@@ -9,14 +9,13 @@ class PizzaList extends React.Component {
 
   handleAddClick = () => {
     console.log("TODO: add this pizza:", this.state.newPizzaName);
-    
-    // mapDispatchToProps(this.state.newPizzaName). We were using this as option 1, without
-    // using bound action creators
 
+    // We were using this as option 1, without
+    // mapDispatchToProps(this.state.newPizzaName). 
+
+    // using bound action creators
     this.props.addPizza(this.state.newPizzaName)
-    
-    console.log("this is to test if the mapDispatchtoProps worked or not")
-    
+        
     // this.props.dispatch({
     //   type: "ADD_PIZZA",
     //   payload: {
@@ -28,12 +27,18 @@ class PizzaList extends React.Component {
 
 
   handlePizzaClick =(id) => {
-    // this.setState({selectedPizza:target.value})
     // console.log(`pizza ${id} was selected`)
     console.log("a pizza was selected with id: ", id)
-    this.setState({selectedPizzaId: id})
-    console.log("The state of select pizza:", this.state.selectedPizzaId)
-    this.props.selectPizza(this.state.selectedPizzaId)
+
+    // We can set the local state and then send the value to the redux state but that causes a problem
+    // of onclick behaving only while double clicking
+
+    // this.setState({selectedPizzaId: id})
+    // console.log("The state of select pizza:", this.state.selectedPizzaId)
+    // this.props.selectPizza(this.state.selectedPizzaId)
+
+    // To prevent that problem, we straightaway send the id to the redux state onClick of the li item
+    this.props.selectPizza(id)
   }
 
   
@@ -44,7 +49,8 @@ class PizzaList extends React.Component {
         <ul>
           {this.props.pizzas.map((pizza) => {
             return <li key={pizza.id} onClick ={()=> this.handlePizzaClick(pizza.id)}>{pizza.name}</li>;
-          })}
+
+})}
         </ul>
         <p>
           New pizza:
