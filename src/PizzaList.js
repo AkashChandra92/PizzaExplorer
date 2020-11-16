@@ -10,7 +10,8 @@ class PizzaList extends React.Component {
   handleAddClick = () => {
     console.log("TODO: add this pizza:", this.state.newPizzaName);
     
-    // mapDispatchToProps(this.state.newPizzaName)
+    // mapDispatchToProps(this.state.newPizzaName). We were using this as option 1, without
+    // using bound action creators
 
     this.props.addPizza(this.state.newPizzaName)
     
@@ -31,9 +32,11 @@ class PizzaList extends React.Component {
     // console.log(`pizza ${id} was selected`)
     console.log("a pizza was selected with id: ", id)
     this.setState({selectedPizzaId: id})
-    // this.props.selectPizza(this.state.selectedPizzaId)
+    console.log("The state of select pizza:", this.state.selectedPizzaId)
+    this.props.selectPizza(this.state.selectedPizzaId)
   }
 
+  
   render() {
     return (
       <div>
@@ -65,17 +68,20 @@ function mapStateToProps(reduxState) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    addPizza(pizzaName) {
-      dispatch({
-        type: "ADD_PIZZA",
-        payload: {
-          id: Math.floor(Math.random() * 10000),
-          name: pizzaName,
-        },
-      });
-    },
+// this mapDispatchToProps was for one action
+// function mapDispatchToProps(dispatch) {
+//   return {
+//     addPizza(pizzaName) {
+//       dispatch({
+//         type: "ADD_PIZZA",
+//         payload: {
+//           id: Math.floor(Math.random() * 10000),
+//           name: pizzaName,
+//         },
+//       });
+//     },
+   
+    // The selectPizza below were trials
     // selectPizza = (id) => {
       //     this.props.dispatch({
       //         type: "SELECT_PIZZA",
@@ -94,8 +100,24 @@ function mapDispatchToProps(dispatch) {
     //     }
     //   })
     // }
-  };
-}
+//   };
+// }
+
+// This mapDispatchToProps is for multiple actions
+const mapDispatchToProps = (dispatch) => ({
+  addPizza: (pizzaName)=> dispatch({
+            type: "ADD_PIZZA",
+            payload: {
+              id: Math.floor(Math.random() * 10000),
+              name: pizzaName,
+            },
+          }),
+  selectPizza: (id) => dispatch({
+            type: "SELECT_PIZZA",
+            payload: id
+  })
+});
+
 
 // const connectingHOC = connect(mapStateToProps,  );
 const connectingHOC = connect(mapStateToProps, mapDispatchToProps );
